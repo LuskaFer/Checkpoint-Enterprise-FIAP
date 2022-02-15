@@ -1,0 +1,70 @@
+package br.com.hospitalsaude.main;
+import br.com.hospitalsaude.bean.*;
+import br.com.hospitalsaude.dao.*;
+import br.com.hospitalsaude.dao.impl.*;
+import br.com.hospitalsaude.exception.*;
+
+import java.util.Calendar;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+
+public class VendaDaoTeste {
+
+	public static void main(String[] args) {
+		
+		EntityManagerFactory hospital = Persistence.createEntityManagerFactory("oracle");
+		EntityManager em = hospital.createEntityManager();
+		
+		
+		IdentificacaoDao dao = new IdentificacaoDaoImpl(em);
+		
+		
+		Identificacao identificacao = new Identificacao("José Silva", Calendar.getInstance());
+		
+		try { 
+			dao.create(identificacao);
+			dao.commit();
+			System.out.println("Cadastro registrado!");
+		}catch(CommitException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		
+		try {
+			identificacao = dao.read(21);
+			System.out.println(identificacao);
+		} catch(IdentificacaoNotFoundException e) {
+			System.out.println("Cadastro não encontrado");
+		}
+		
+		
+		identificacao = new	Identificacao("José Silva", "(11)3003-1000", "Médico", 23350,
+				"Avenida das Oliveiras", 25, "450.005.789-12", 35);
+		try {
+			dao.update(identificacao);
+			dao.commit();
+			System.out.println("Cadastro atualizada!");
+		} catch (CommitException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		
+		try {
+			dao.delete(4);
+			dao.commit();
+			System.out.println("Cadastro removida!");
+		} catch (CommitException e) {
+			System.out.println(e.getMessage());
+		} catch (VendaNotFoundException e) {
+			System.out.println("Cadastro não encontrado para remoção");
+		}
+		
+	
+		em.close();
+		hospital.close();
+		
+	
+}

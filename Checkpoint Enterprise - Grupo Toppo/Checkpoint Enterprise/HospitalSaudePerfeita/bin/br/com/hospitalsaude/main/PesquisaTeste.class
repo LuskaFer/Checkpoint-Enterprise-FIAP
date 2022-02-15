@@ -1,0 +1,35 @@
+package br.com.hospitalsaude.main;
+import br.com.hospitalsaude.bean.*;
+import br.com.hospitalsaude.dao.*;
+import br.com.hospitalsaude.dao.impl.*;
+import br.com.hospitalsaude.exception.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+public class PesquisaTeste {
+
+	public static void main(String[] args) {
+		
+		EntityManagerFactory hospital = Persistence.createEntityManagerFactory("oracle");
+		EntityManager em = hospital.createEntityManager();
+		
+		
+		Identificacao identificacao = em.find(Identificacao.class, 1);
+		
+		
+		System.out.println(identificacao);
+		
+	
+		identificacao.setIdade(45);
+		
+		
+		em.getTransaction().begin();
+		em.getTransaction().commit();
+		
+		
+		em.close();
+		hospital.close();
+	}
+	
+}

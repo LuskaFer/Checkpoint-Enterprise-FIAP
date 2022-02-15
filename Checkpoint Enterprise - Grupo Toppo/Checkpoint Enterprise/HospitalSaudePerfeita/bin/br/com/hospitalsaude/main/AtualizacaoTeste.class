@@ -1,0 +1,41 @@
+package br.com.hospitalsaude.main;
+import br.com.hospitalsaude.bean.*;
+import br.com.hospitalsaude.dao.*;
+import br.com.hospitalsaude.dao.impl.*;
+import br.com.hospitalsaude.exception.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+
+
+
+public class AtualizacaoTeste {
+	
+	public static void main(String[] args) {
+		
+		
+		EntityManagerFactory hospital = Persistence.createEntityManagerFactory("oracle");
+		EntityManager em = hospital.createEntityManager();
+		
+		
+		Identificacao identificacao = new Identificacao ("José Silva", "(11)3003-1000", "Médico", 23350,
+				"Avenida das Oliveiras", 25, "450.005.789-12", 35);
+								
+		
+	
+		Identificacao identificacaoGerenciada = em.merge(identificacao); 
+		
+	
+
+		em.getTransaction().begin();
+		em.getTransaction().commit();
+		
+
+		em.close();
+		hospital.close();
+		
+	}
+
+}
